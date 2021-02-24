@@ -30,4 +30,4 @@ GM_setValue('url', 1); // url
 
 [scripts]: https://github.com/pbl0/rr-scripts/blob/main/README.md
 
-[raw]: hhttps://github.com/pbl0/auto-perk/raw/main/auto-perk.user.js
+[raw]: https://github.com/pbl0/auto-perk/raw/main/auto-perk.user.js
