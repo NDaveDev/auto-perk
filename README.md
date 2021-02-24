@@ -17,3 +17,17 @@ GM_setValue('url', 1); // url
 #### Url
 1. Money
 2. Gold
+
+
+### Install
+
+- Read [how to install user scripts for RR][guide].
+- Click [here][raw] to install.
+- Check out my [RR script collection][scripts].
+
+
+[guide]: https://github.com/pbl0/rr-scripts/blob/main/guide.md
+
+[scripts]: https://github.com/pbl0/rr-scripts/blob/main/README.md
+
+[raw]: hhttps://github.com/pbl0/auto-perk/raw/main/auto-perk.user.js

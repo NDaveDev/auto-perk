@@ -7,7 +7,7 @@
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @require https://greasemonkey.github.io/gm4-polyfill/gm4-polyfill.js
-// @downloadURL
+// @downloadURL https://github.com/pbl0/auto-perk/raw/main/auto-perk.user.js
 // ==/UserScript==
 
 /**
