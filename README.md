@@ -10,10 +10,10 @@ GM_setValue('perk', 2); // perk
 GM_setValue('url', 1); // url
 ```
  
-- Perk: 
-    1. Strength
-    2. Education
-    3. Endurance
-- Url:
-    1. Money
-    2. Gold
+#### Perk: 
+1. Strength
+2. Education
+3. Endurance
+#### Url
+1. Money
+2. Gold
