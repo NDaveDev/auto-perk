@@ -63,8 +63,11 @@ function upgradePerk() {
         data: { c: c_html },
         type: 'POST',
         success: function (data) {
+            console.log('perk upgraded', new Date().toLocaleString());
             // console.log(data);
-            ajax_action('main/content');
+            // ajax_action('main/content');
+            location.reload();
+            
         },
     });
 }
