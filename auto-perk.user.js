@@ -65,8 +65,9 @@ function upgradePerk() {
         type: 'POST',
         success: function (data) {
             console.log('perk upgraded', new Date().toLocaleString());
-            // console.log(data);
+            console.log(data);
             // ajax_action('main/content');
+
             location.reload();
             
         },
@@ -108,7 +109,7 @@ function setUpgradeTimeout() {
 
     setTimeout(() => {
         upgradePerk();
-    }, timeout + 3000);
+    }, timeout + 60000);
 }
 
 function addDiv(nextPerkDate) {
