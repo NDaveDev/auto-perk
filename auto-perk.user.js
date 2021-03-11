@@ -6,6 +6,7 @@
 // @description Auto perk
 // @grant       GM_getValue
 // @grant       GM_setValue
+// @version      0.0.1
 // @require https://greasemonkey.github.io/gm4-polyfill/gm4-polyfill.js
 // @downloadURL https://github.com/pbl0/auto-perk/raw/main/auto-perk.user.js
 // ==/UserScript==
