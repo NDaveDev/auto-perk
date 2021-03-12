@@ -1,5 +1,7 @@
 # auto-perk
 
+**Important: This script only works with the english interface**
+ 
 Script that upgrades your perks automatically.
 
 Change default `perk` and `url` values on the values tab in ViolentMonkey.
