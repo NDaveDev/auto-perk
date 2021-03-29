@@ -2,16 +2,22 @@
 // @name        auto-perk
 // @namespace   https://pablobls.tech/
 // @match       *://rivalregions.com/
-// @author      Pablo
-// @description Auto perk
+// @author      pablo
+// @description Subite los stats bobo
 // @grant       GM_getValue
 // @grant       GM_setValue
-// @version      0.0.2
+// @version     0.0.3
 // @require https://greasemonkey.github.io/gm4-polyfill/gm4-polyfill.js
 // @downloadURL https://github.com/pbl0/auto-perk/raw/main/auto-perk.user.js
 // ==/UserScript==
 
 /**
+ * v0.0.3 - added perk and url menu
+ */
+
+/**
+ * ONLY WORKS WITH ENGLISH INTERFACE
+ * 
  * Perk:
  * 1 = strength
  * 2 = education
@@ -22,8 +28,6 @@
  * 2 = gold
  *
  *
- * - TamperMonkey change the default values BEFORE install (re-install if needed).
- * - ViolentMonkey allows to change them in the 'Values' tab on edit script page.
  */
 
 const firstTime = GM_getValue('first-time', true);
@@ -33,39 +37,64 @@ if (firstTime) {
     GM_setValue('url', 1); // url
 }
 
-$(document).ready(() => {
-    if (firstTime) {
-        GM_setValue('first-time', false);
-    } else {
-        var waitInterval = setInterval(() => {
-            if ($('#index_perks_list').length) {
-                clearInterval(waitInterval);
-                // to check if any perk is already active
-                const countdownAmount = $(
-                    '#index_perks_list>div>div[perk]>.hasCountdown'
-                ).length;
-                if (countdownAmount === 0) {
-                    upgradePerk();
-                } else {
-                    console.log('perk already active');
 
-                    setUpgradeTimeout();
-                }
-            }
-        }, 1000);
-    }
+$(document).ready(function () {
+    window.addEventListener('popstate', listener);
+
+    const pushUrl = (href) => {
+        history.pushState({}, '', href);
+        window.dispatchEvent(new Event('popstate'));
+    };
+
+    listener();
 });
 
+function listener(){
+    
+    if (location.href.includes('#overview')) {
+        mainPage()
+    }
+
+}
+
+function mainPage(){
+    if (firstTime) {
+        GM_setValue('first-time', false);
+    }
+    var waitInterval = setInterval(() => {
+        if ($('#index_perks_list').length) {
+            addMenu()
+            clearInterval(waitInterval);
+            // to check if any perk is already active
+            const countdownAmount = $(
+                '#index_perks_list>div>div[perk]>.hasCountdown'
+            ).length;
+            if (countdownAmount === 0) {
+                setTimeout(()=>{upgradePerk()}, 1000)
+                    
+                
+                
+            } else {
+                console.log('perk already active');
+
+                setUpgradeTimeout();
+            }
+        }
+    }, 1000);
+    
+}
+
 function upgradePerk() {
-    const perk = GM_getValue('perk');
-    const url = GM_getValue('url');
+    const perk = $('#myperk').val() // GM_getValue('perk');
+    const url = $('#myurl').val(); // GM_getValue('url');
+    // console.log(perk, url)
     $.ajax({
         url: '/perks/up/' + perk + '/' + url,
         data: { c: c_html },
         type: 'POST',
         success: function (data) {
             console.log('perk upgraded', new Date().toLocaleString());
-            console.log(data);
+            // console.log(data);
             // ajax_action('main/content');
 
             location.reload();
@@ -85,14 +114,14 @@ function setUpgradeTimeout() {
        
         let tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
-        const date = tomorrow.toDateString();
+        const date = tomorrow.toLocaleDateString();
         const time = nextPerkText.replace('tomorrow ', '');
 
         nextPerkText = `${date} ${time}`;
 
     } else if (nextPerkText.includes('today')){
 
-        const date = new Date().toDateString();
+        const date = new Date().toLocaleDateString();
         const time = nextPerkText.replace('today ', '');
 
         nextPerkText = `${date} ${time}`;
@@ -101,11 +130,9 @@ function setUpgradeTimeout() {
     const nextPerk = Date.parse(nextPerkText);
     
     const timeout = nextPerk - c();
-    // console.log('npt', nextPerkText)
-    // console.log('np', nextPerk);
-    // console.log('to',timeout)
 
     addDiv(nextPerkText);
+    
 
     setTimeout(() => {
         upgradePerk();
@@ -120,8 +147,8 @@ function addDiv(nextPerkDate) {
     const url = urls[GM_getValue('url') - 1];
 
     const div = `   <div class="perk_item ib_border hov pointer">
-                        <div class="tc small">${nextPerkDate}</div>
-                        <div class="tc small">${perk} - ${url}</div>
+                        <div class="tc small">Next Perk: ${nextPerkDate}</div>
+                        <div class="tc small">${GM_info.script.name } v${GM_info.script.version} by ${GM_info.script.author}</div>
                         <div class="tc small">
                             <a target="blank_" href="https://github.com/pbl0/rr-scripts">More scripts</a>
                         </div>
@@ -130,4 +157,37 @@ function addDiv(nextPerkDate) {
     if (window.location.href.includes('#overview')) {
         $('#index_perks_list').append(div);
     }
+}
+
+function addMenu(){
+
+    const perk = Number(GM_getValue('perk'))
+    
+    const url = Number(GM_getValue('url'))
+
+    // console.log(perk, url)
+    
+    const input = `<div id="mymenu" class="perk_item ib_border hov pointer">
+                        
+                        <select id="myurl">
+                            <option ${ url==1?'selected':'' } value="1">Money</option>
+                            <option ${ url==2?'selected':'' } value="2">Gold</option>
+                        </select>
+                        <select id="myperk">
+                            <option ${ perk==1?'selected':'' } value="1">Stregth</option>
+                            <option ${ perk==2?'selected':'' } value="2">Education</option>
+                            <option ${ perk==3?'selected':'' } value="3">Endurance</option>
+                        </select>
+
+                    </div>`
+    $('#index_perks_list').append(
+        input
+    )
+
+    $('#myurl').change(function(){
+        GM_setValue('url', $(this).val())
+    })
+    $('#myperk').change(function(){
+        GM_setValue('perk', $(this).val())
+    })
 }
