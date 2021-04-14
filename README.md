@@ -4,21 +4,9 @@
  
 Script that upgrades your perks automatically.
 
-Change default `perk` and `url` values on the values tab in ViolentMonkey.
-In TamperMonkey you might have to edit it manually on the script itself **BEFORE** installing (re-install whenever you change it):
+Select perk and type of payment.
 
-```
-GM_setValue('perk', 2); // perk
-GM_setValue('url', 1); // url
-```
- 
-#### Perk: 
-1. Strength
-2. Education
-3. Endurance
-#### Url
-1. Money
-2. Gold
+<img class="image" src="https://raw.githubusercontent.com/pbl0/auto-perk/main/perk.png" alt="menu"/>
 
 
 ### Install
@@ -28,8 +16,8 @@ GM_setValue('url', 1); // url
 - Check out my [RR script collection][scripts].
 
 
-[guide]: https://github.com/pbl0/rr-scripts/blob/main/guide.md
+[guide]: https://rr-tools.eu/guide
 
-[scripts]: https://github.com/pbl0/rr-scripts/blob/main/README.md
+[scripts]: https://rr-tools.eu/mods
 
 [raw]: https://github.com/pbl0/auto-perk/raw/main/auto-perk.user.js
