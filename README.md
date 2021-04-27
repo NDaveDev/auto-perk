@@ -9,7 +9,7 @@ Select perk and type of payment.
 <img class="image" src="https://raw.githubusercontent.com/pbl0/auto-perk/main/perk.png" alt="menu"/>
 
 
-### Install
+## Install
 
 - Read [how to install user scripts for RR][guide].
 - Click [here][raw] to install.

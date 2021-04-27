@@ -1,14 +1,12 @@
 // ==UserScript==
-// @name        auto-perk
+// @name        auto-perk-test
 // @namespace   https://pablobls.tech/
-// @match       *://rivalregions.com/
+// @match       *://*rivalregions.com/
 // @author      pablo
 // @description Subite los stats bobo
 // @grant       GM_getValue
 // @grant       GM_setValue
-// @version     0.0.4
-// @require https://greasemonkey.github.io/gm4-polyfill/gm4-polyfill.js
-// @downloadURL https://github.com/pbl0/auto-perk/raw/main/auto-perk.user.js
+// @version     0.0.5
 // ==/UserScript==
 
 /**
@@ -63,10 +61,11 @@ function mainPage() {
             addMenu();
             clearInterval(waitInterval);
             // to check if any perk is already active
-            const countdownAmount = $(
+            const countdown = $(
                 '#index_perks_list>div>div[perk]>.hasCountdown'
-            ).length;
-            if (countdownAmount === 0) {
+            )
+            const countdownAmount = countdown.length;
+            if (countdownAmount === 0 || countdown.text() == '00:00') {
                 setTimeout(() => {
                     upgradePerk();
                 }, 1000);
@@ -88,11 +87,18 @@ function upgradePerk() {
         data: { c: c_html },
         type: 'POST',
         success: function (data) {
-            console.log('perk upgraded', new Date().toLocaleString());
-            // console.log(data);
+            
+            console.log(data);
             // ajax_action('main/content');
+            if (data !== undefined && data.includes('script')) {
+                console.log('perk upgraded', new Date().toLocaleString());
 
-            location.reload();
+                $('body').append(data);
+
+                mainPage();
+                
+            }
+            // ocation.reload();
         },
     });
 }
@@ -125,7 +131,7 @@ function setUpgradeTimeout() {
 
     setTimeout(() => {
         upgradePerk();
-    }, timeout + 60000);
+    }, timeout + 10000);
 }
 
 function addDiv(nextPerkDate) {
