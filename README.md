@@ -1,5 +1,7 @@
 # auto-perk
 
+> Many people reported a bug that caused infinite page refreshing. I haven't been able to replicate this bug on my machine for many months. Many thanks to Itusil for finding the exact error that caused this behaviour and also for submiting the bug fix.
+
 **Important: This script only works with the english interface**
  
 Script that upgrades your perks automatically.

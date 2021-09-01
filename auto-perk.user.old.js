@@ -1,18 +1,15 @@
 // ==UserScript==
-// @name        auto-perk
+// @name        auto-perk-test
 // @namespace   https://pablobls.tech/
-// @match       *://rivalregions.com/
+// @match       *://*rivalregions.com/
 // @author      pablo
 // @description Subite los stats bobo
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @version     0.0.5
-// @require https://greasemonkey.github.io/gm4-polyfill/gm4-polyfill.js
-// @downloadURL https://github.com/pbl0/auto-perk/raw/main/auto-perk.user.js
 // ==/UserScript==
 
 /**
- * v0.0.5 - removed bug that caused infinite page-refreshing to many people. Many thanks to Itusil for finding the error & fixing it! 
  * v0.0.3 - added perk and url menu
  */
 
@@ -30,7 +27,7 @@
  *
  *
  */
-//const $ = window.jQuery;
+
 const firstTime = GM_getValue('first-time', true);
 
 if (firstTime) {
@@ -64,10 +61,11 @@ function mainPage() {
             addMenu();
             clearInterval(waitInterval);
             // to check if any perk is already active
-            const countdownAmount = $(
+            const countdown = $(
                 '#index_perks_list>div>div[perk]>.hasCountdown'
-            ).length;
-            if (countdownAmount === 0) {
+            )
+            const countdownAmount = countdown.length;
+            if (countdownAmount === 0 || countdown.text() == '00:00') {
                 setTimeout(() => {
                     upgradePerk();
                 }, 1000);
@@ -89,11 +87,17 @@ function upgradePerk() {
         data: { c: c_html },
         type: 'POST',
         success: function (data) {
-            console.log('perk upgraded', new Date().toLocaleString());
-            // console.log(data);
+            
+            console.log(data);
             // ajax_action('main/content');
+            if (data !== undefined && data.includes('script')) {
+                console.log('perk upgraded', new Date().toLocaleString());
 
-            location.reload();
+                $('body').append(data);
+
+                // mainPage();
+                location.reload();
+            }
         },
     });
 }
@@ -104,72 +108,49 @@ function setUpgradeTimeout() {
         .text()
         .replace('New skill level: ', '');
 
-    const tiempo = $('#index_perks_list>div>div[perk]>.hasCountdown').text();
+    if (nextPerkText.includes('tomorrow')) {
+        let tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const date = tomorrow.toLocaleDateString();
+        const time = nextPerkText.replace('tomorrow ', '');
 
-    //Itusil
-    //Cambiamos la forma de mirar cuanto queda, ahora sacamos el tiempo que ble queda a la perk y lo pasamos a ms
-    let longitud = tiempo.length;
-    let ms = 0;
-    nextPerkText = '';
-    if (tiempo.includes('d ')) {
-        //Significará que es dd 'd' HH:mm:ss
-        const tiempoSplitted = tiempo.split(' d ');
+        nextPerkText = `${date} ${time}`;
+    } else if (nextPerkText.includes('today')) {
+        const date = new Date().toLocaleDateString();
+        const time = nextPerkText.replace('today ', '');
 
-        const MHSArr = tiempoSplitted[1].split(':');
-        const dias = tiempoSplitted[0];
-        const horas = MHSArr[0];
-        const mins = MHSArr[1];
-        const segs = MHSArr[2];
-
-        //Tiempo en ms
-        ms = dias * 86400000 + horas * 3600000 + mins * 60000 + segs * 1000;
-    } else {
-        const MHSArr = tiempo.split(':');
-        if (longitud > 5) {
-            //Significará que es HH:mm:ss
-            const horas = MHSArr[0];
-            const mins = MHSArr[1];
-            const segs = MHSArr[2];
-            //Tiempo en ms
-            ms = horas * 3600000 + mins * 60000 + segs * 1000;
-        } else {
-            //Significará que es mm:ss
-            const mins = MHSArr[0];
-            const segs = MHSArr[1];
-            ms = mins * 60000 + segs * 1000;
-        }
+        nextPerkText = `${date} ${time}`;
     }
 
-    const timeout = ms;
+    const nextPerk = Date.parse(nextPerkText);
 
-    console.log(timeout)
-
-    nextPerkText = 'Timer for next perk set in ' + tiempo;
+    const timeout = nextPerk - c();
 
     addDiv(nextPerkText);
 
     setTimeout(() => {
         upgradePerk();
-    }, timeout + 60000);
+    }, timeout + 10000);
 }
 
 function addDiv(nextPerkDate) {
-    if ($('#my-div').length <= 0) {
+    if ($('#my-div').length <= 0){
         const perks = ['Stregth', 'Education', 'Endurance'];
         const urls = ['Money', 'Gold'];
-
+    
         const div = `   <div id="my-div" class="perk_item ib_border hov pointer">
-                            <div class="tc small">${nextPerkDate}</div>
+                            <div class="tc small">Next Perk: ${nextPerkDate}</div>
                             <div class="tc small">${GM_info.script.name} v${GM_info.script.version} by ${GM_info.script.author}</div>
                             <div class="tc small">
                                 <a target="blank_" href="https://github.com/pbl0/rr-scripts">More scripts</a>
                             </div>
                         </div>`;
-
+    
         if (window.location.href.includes('#overview')) {
             $('#index_perks_list').append(div);
         }
     }
+
 }
 
 function addMenu() {
