@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        auto-perk
 // @namespace   https://pablobls.tech/
-// @match       *://rivalregions.com/
+// @match       *://*rivalregions.com/
 // @author      pablo
 // @description Subite los stats bobo
 // @grant       GM_getValue
