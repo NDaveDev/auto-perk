@@ -1,6 +1,8 @@
 # auto-perk
 
-> Many people reported a bug that caused infinite page refreshing. I haven't been able to replicate this bug on my machine for many months. Many thanks to Itusil for finding the exact error that caused this behaviour and also for submiting the bug fix.
+> Many people reported a bug that caused infinite page refreshing. Many thanks to Itusil for finding the exact error that caused this behaviour and also for submiting a bug fix.
+
+> If you have trouble using the new version you can still install the [legacy version][rawlegacy]. 
 
 **Important: This script only works with the english interface**
  
@@ -15,6 +17,7 @@ Select perk and type of payment.
 
 - Read [how to install user scripts for RR][guide].
 - Click [here][raw] to install.
+- If you have trouble with that script install [legacy version][rawlegacy] instead. Remove/disable the other version!.
 - Check out my [RR script collection][scripts].
 
 
@@ -23,3 +26,5 @@ Select perk and type of payment.
 [scripts]: https://rr-tools.eu/mods
 
 [raw]: https://github.com/pbl0/auto-perk/raw/main/auto-perk.user.js
+
+[rawlegacy]: https://github.com/pbl0/auto-perk/raw/main/auto-perk-legacy.user.js
